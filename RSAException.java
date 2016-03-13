@@ -3,7 +3,12 @@
  * custom exception handler.  It is used the same way a regular exception would be used.  The main
  * reason for this class is not to stop the user from doing something wrong, since they won't have
  * access to this class, but to stop the programmer from executing certain operations.  This class
- * serves to warn the user of the illegible action so it may be corrected.
+ * serves to warn the user of the illegible action so it may be corrected.  Some examples of when
+ * this exception will be thrown are as follows.  If division by zero is attempted within the
+ * Operator's divide function.  If a negative number is yielded within the subtraction function in
+ * same said class.  Finally this exception can be thrown if a Decimal instance is initiated with
+ * passing an invalid representation of a huge unsigned integer within the Decimal class'
+ * constructor.
  * @version     1.0.0
  * @university  University of Illinois at Chicago
  * @course      CS342 - Software Design
