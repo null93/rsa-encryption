@@ -1,3 +1,6 @@
+import java.io.StringWriter;
+import java.io.PrintWriter;
+
 /**
  * RSAException.java - This class extends from the system native Exception class and is used as a
  * custom exception handler.  It is used the same way a regular exception would be used.  The main
@@ -57,6 +60,11 @@ public class RSAException extends Exception {
 		super ();
 		// Alert user that an unknown exception was thrown
 		System.out.println ( header + "Unknown exception was thrown!" );
+		// Print the stack trace
+		StringWriter errors = new StringWriter ();
+		super.printStackTrace ( new PrintWriter ( errors ) );
+		String stack = errors.toString ();
+		System.out.print ( stack.substring ( stack.indexOf ('\n') + 1 ) );
 	}
 
 	/**
@@ -70,6 +78,11 @@ public class RSAException extends Exception {
 		super ( message );
 		// Print out the exception's message
 		System.out.println ( header + message );
+		// Print the stack trace
+		StringWriter errors = new StringWriter ();
+		super.printStackTrace ( new PrintWriter ( errors ) );
+		String stack = errors.toString ();
+		System.out.println ( stack.substring ( stack.indexOf ('\n') + 1 ) );
 	}
 
 }

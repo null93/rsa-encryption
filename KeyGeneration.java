@@ -15,53 +15,89 @@
  */
 public class KeyGeneration {
 
-	protected Decimal publicKey;
+	/**
+	 * This data member stores a Key instance that is initialized to be a public key.
+	 * @var     Key             publicKey           The public key based on input primes
+	 */
+	protected Key publicKey;
 
-	protected Decimal privateKey;
+	/**
+	 * This data member stores a Key instance that is initialized to be a private key.
+	 * @var     Key             privateKey          The private key based on input primes
+	 */
+	protected Key privateKey;
 
-	private Decimal p;
-
-	private Decimal q;
-
-	protected Decimal n;
-
-	private Decimal phi;
-
-	private static Decimal min = new Decimal ( "1" );
-
+	/**
+	 * This data member is used within calculation in key creation and exists to make the
+	 * calculations more readable, and since we never modify it within our calculations we make it
+	 * static and final.
+	 * @var     Decimal         one                 Decimal instance initialized to "1"
+	 * @static
+	 * @final
+	 */
 	private static Decimal one = new Decimal ( "1" );
 
+	/**
+	 * This constructor takes in two prime numbers and generates a public and private key based on
+	 * the RSA protocol.  Once the encryption and decryption keys are generated they are stored
+	 * internally and the caller is expected to export them.
+	 * @param   Decimal         p                   The first prime to work with
+	 * @param   Decimal         q                   The second prime to work with
+	 * @throws  Exception 							Catches generic exception
+	 */
 	protected KeyGeneration ( Decimal p, Decimal q ) {
-		// Save both the prime numbers internally
-		this.p = p;
-		this.q = q;
 		// Subtract one from both the primes
-		Decimal pSubOne = Operation.subtract ( this.p, one );
-		Decimal qSubOne = Operation.subtract ( this.q, one );
+		Decimal pSubOne = Operation.subtract ( p, one );
+		Decimal qSubOne = Operation.subtract ( q, one );
 		// Calculate the multiple of both primes
-		this.n = Operation.multiply ( p, q );
+		Decimal n = Operation.multiply ( p, q );
 		// Calculate the number of co primes in the range of: 1 < x < n
-		this.phi = Operation.multiply ( pSubOne, qSubOne );
-
-
+		Decimal phi = Operation.multiply ( pSubOne, qSubOne );
+		// Initialize the encryption prime at 2 initially
 		Decimal e = new Decimal ( "2" );
+		// Loop through adding one to e until the condition is met
 		while ( Operation.lessThanEqual ( e, n ) && !Operation.equal ( one, gcd ( e, phi ) ) ) {
+			// Increment encryption key by one
 			e = Operation.add ( e, one );
 		}
-		e.print ();
-
-		Decimal d = new Decimal ( "1" );
-		while ( !Operation.equal ( one, Operation.modulo ( Operation.multiply ( e, d ), phi ) ) || Operation.equal ( e, d ) ) {
-			d.print ();
-			d = Operation.add ( d, one );
+		// Initialize the decryption prime to be one initially and the traversal variable as well
+		Decimal d = new Decimal ( "0" );
+		Decimal traverse = new Decimal ( "0" );
+		// Declare internal variables outside (trying to save space)
+		Decimal nm;
+		Decimal nmPlusOne;
+		Decimal nmPlusOneModulusE;
+		// Traverse through until we loop through the entire range of n
+		while ( Operation.lessThanEqual ( traverse, n ) ) {
+			// Calculate the d based on interval traverse
+			nm = Operation.multiply ( traverse, phi );
+			nmPlusOne = Operation.add ( nm, one );
+			nmPlusOneModulusE = Operation.modulo ( nmPlusOne, e );
+			// Check that the modulo is zero
+			if ( Operation.equal ( nmPlusOneModulusE, Decimal.zero ) ) {
+				// Calculate d
+				d = Operation.divide ( nmPlusOne, e );
+				// Check to see that d != e
+				if ( !Operation.equal ( d, e ) ) {
+					// If all conditions are met, then break and keep d value
+					break;
+				}
+			}
+			// Increment traversal Decimal instance
+			traverse = Operation.add ( traverse, one );
 		}
-		d.print ();
-
-
+		// Create the public and private keys
+		this.publicKey = new Key ( n, e, Key.Type.PUBLIC );
+		this.privateKey = new Key ( n, d, Key.Type.PRIVATE );
 	}
 
 	/**
-	 * 
+	 * This function calculates the greatest common divisor and returns it as a Decimal instance.
+	 * This function also takes in two decimal instances to evaluate.  By default one is returned if
+	 * no greater common divisor is found.
+	 * @param   Decimal         a                   The first Decimal to evaluate
+	 * @param   Decimal         b                   The second Decimal to evaluate
+	 * @return  Decimal                             Greatest common divisor as Decimal instance
 	 */
 	private Decimal gcd ( Decimal a, Decimal b ) {
 		// Base case, if either is zero

@@ -19,15 +19,18 @@ public class RSA {
 	public static void main ( String [] args ) {
 
 		new GUI ();
-		// Decimal a = new Decimal ( "32416189493" );
-		// Decimal b = new Decimal ( "32416187567" );
-		Decimal a = new Decimal ( "2" );
-		Decimal b = new Decimal ( "7" );
-		Operation.multiply ( a, b ).print ();
-		Operation.multiply ( a, new Decimal ( "14" ) ).print ();
 
-		//KeyGen kg = new KeyGen ( a, b );
-		
+		Decimal a = new Decimal ( "32416187567" );
+		Decimal b = new Decimal ( "32416190071" );
+
+
+		Key key = new Key ( "./output/2016-37-14-06-37-20/public.xml" );
+		//key.get ( Key.Attribute.K ).print ();
+
+		// KeyGeneration keygen = new KeyGeneration ( a, b );
+		// String timestamp = Key.timestamp ();
+		//System.out.println ( keygen.publicKey.export ( timestamp ) );
+		//System.out.println ( keygen.privateKey.export ( timestamp ) );
 
 	}
 

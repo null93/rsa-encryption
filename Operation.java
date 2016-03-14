@@ -137,19 +137,18 @@ public class Operation {
 		Arrays.fill ( result, '0' );
 		// Loop through the first decimals digits
 		for ( int j = 0; j < b.length; j++ ) {
-			// Reset carry to zero
-			carry = 0;
 			// Loop through second decimals digits
 			for ( int i = 0; i < a.length; i++ ) {
 				// Calculate the result digit and carry
 				digit = Decimal.parseInt ( result [ i + j ] );
-				digit += carry + ( a.get ( j ) * b.get ( i ) );
+				digit += carry + ( a.get ( i ) * b.get ( j ) );
 				carry = digit / 10;
 				// Set to current position
 				result [ i + j ] = Decimal.parseChar ( digit % 10 );
 			}
 			// Append the carry when we are done with line
-			result [ j + b.length ] += carry;
+			result [ j + a.length ] += carry % 10;
+			carry = carry / 10;
 		}
 		// Reverse the resulting digit
 		for ( int i = 0; i < max / 2; i++ ) {
