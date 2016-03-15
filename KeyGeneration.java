@@ -35,7 +35,7 @@ public class KeyGeneration {
 	 * @static
 	 * @final
 	 */
-	private static Decimal one = new Decimal ( "1" );
+	protected static Decimal one = new Decimal ( "1" );
 
 	/**
 	 * This constructor takes in two prime numbers and generates a public and private key based on
@@ -98,8 +98,9 @@ public class KeyGeneration {
 	 * @param   Decimal         a                   The first Decimal to evaluate
 	 * @param   Decimal         b                   The second Decimal to evaluate
 	 * @return  Decimal                             Greatest common divisor as Decimal instance
+	 * @static
 	 */
-	private Decimal gcd ( Decimal a, Decimal b ) {
+	protected static Decimal gcd ( Decimal a, Decimal b ) {
 		// Base case, if either is zero
 		if ( Operation.equal ( a, Decimal.zero ) || Operation.equal ( b, Decimal.zero ) ) {
 			return Operation.add ( a, b );

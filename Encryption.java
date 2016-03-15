@@ -15,10 +15,40 @@
 public class Encryption {
 
 	/**
-	 * 
+	 *
 	 */
 	protected Encryption () {
 
+	}
+
+	public static void main ( String [] args ) {
+		Decimal a = new Decimal ( "2" );
+		Decimal b = new Decimal ( "7" );
+		KeyGeneration keygen = new KeyGeneration ( a, b );
+		Decimal e = new Decimal ( keygen.publicKey.get ( Key.Attribute.K ).stringify () );
+		Decimal d = new Decimal ( keygen.privateKey.get ( Key.Attribute.K ).stringify () );
+		Decimal n = new Decimal ( keygen.publicKey.get ( Key.Attribute.N ).stringify () );
+
+		String timestamp = Key.timestamp ();
+		keygen.publicKey.export ( timestamp );
+		keygen.privateKey.export ( timestamp );
+
+		Decimal original = new Decimal ( "0574820589747450" );
+		Decimal encrypted = new Decimal ( "1" );
+		for ( int i = 0; Operation.lessThan ( new Decimal ( Integer.toString ( i ) ), e ); i++ ) {
+			encrypted = Operation.modulo ( Operation.multiply ( encrypted, original ), n );
+		}
+		original.print ();
+		encrypted.print ();
+
+		original = new Decimal ( "2" );
+		Decimal decrypted = new Decimal ( "1" );
+		for ( int i = 0; Operation.lessThan ( new Decimal ( Integer.toString ( i ) ), d ); i++ ) {
+			decrypted = Operation.modulo ( Operation.multiply ( decrypted, original ), n );
+		}
+
+		original.print ();
+		decrypted.print ();
 	}
 
 }

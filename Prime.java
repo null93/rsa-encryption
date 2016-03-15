@@ -1,3 +1,8 @@
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
+import java.io.File;
+
 /**
  * Prime.java - This class will consist of static and non-static functions.  Some examples of static
  * functions within this class would be a function that determines if a passed Decimal instance is
@@ -16,10 +21,84 @@
 public class Prime {
 
 	/**
-	 * 
+	 * This internal data member contains the file that is relative to the current directory, and it
+	 * specifies where the prime numbers recourse file is located.  This is used to select random
+	 * prime numbers.
+	 * @var 	String 			filepath 			The filepath to prime numbers resource file
+	 * @static
+	 * @final
 	 */
-	protected static boolean isPrime ( Decimal a ) {
+	private static final String filepath = "./PrimeNumbers.rsc";
+
+	/**
+	 * This Array list is a dynamic array that grows and populates as we read in all predefined
+	 * primes based on the resource file contents.
+	 * @var 	ArrayList <Decimal> 	primes 		A dynamic array of primes as Decimal instance
+	 */
+	private ArrayList <Decimal> primes;
+
+	/**
+	 * This seed is a running seed and is reseeded every time the generate function runs.  By
+	 * default it is initialized to the current system time in milliseconds.
+	 * @var 	long 			seed 				Our seed for the Random instance
+	 */
+	private long seed = System.currentTimeMillis ();
+
+	/**
+	 * This constructor initializes the Decimal primes dynamic array and also reads in all primes
+	 * from the resource file and loads it into the dynamic array.
+	 */
+	protected Prime () {
+		// Initialize dynamic array of Decimal instances
+		this.primes = new ArrayList <Decimal> ();
+		// Try to open the file and read in primes
+		try {
+			// Initialize scanner instance based on filepath for resource file
+			Scanner scanner = new Scanner ( new File ( Prime.filepath ) );
+			// Loop through until we have no more input
+			while ( scanner.hasNextLine () ) {
+				// Add this Decimal to the primes array
+  				this.primes.add ( new Decimal ( scanner.nextLine () ) );
+			}
+		}
+		// If we throw an exception, then catch it
+		catch ( Exception exception ) {
+			// Exit the program, since we don't want to encounter such an error
+			System.exit ( 0 );
+		}
+
+	}
+
+	/**
+	 * This function is static, and determines if the Decimal instance is a prime number.
+	 * @param   Decimal 		target				The Decimal instance to evaluate primality
+	 * @return  Boolean 							Is the target Decimal instance prime?
+	 * @static
+	 */
+	protected static boolean isPrime ( Decimal target ) {
+		Decimal iterator = new Decimal ( target.stringify () );
+		Decimal lhs = new Decimal ( "1" );
+		while ( Operation.greaterThan ( iterator, new Decimal ( "3" ) ) ) {
+			lhs = Operation.multiply ( new Decimal ( "2" ), lhs );
+			iterator = Operation.subtract ( iterator, new Decimal ( "1" ) );
+		}
 		return false;
+	}
+
+	/**
+	 * This function returns a Decimal representation of a huge unsigned prime integer.  This number
+	 * is derived from a resource file that is specified in the internal variables.
+	 * @return 	Decimal 							A random prime number from resource file
+	 */
+	protected Decimal random () {
+		// Seed our random number generator
+		this.seed *= System.currentTimeMillis ();
+		// Apply modulus to our counting seed
+		this.seed %= System.currentTimeMillis ();
+		// Create a random number generator
+		Random generator = new Random ( this.seed );
+		// Return a random index from the primes array list
+		return this.primes.get ( generator.nextInt ( this.primes.size () ) );
 	}
 
 }

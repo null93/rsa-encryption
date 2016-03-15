@@ -14,23 +14,16 @@
 public class RSA {
 
 	/**
-	 *
+	 * 
 	 */
 	public static void main ( String [] args ) {
 
 		new GUI ();
 
-		Decimal a = new Decimal ( "32416187567" );
-		Decimal b = new Decimal ( "32416190071" );
-
-
-		Key key = new Key ( "./output/2016-37-14-06-37-20/public.xml" );
-		//key.get ( Key.Attribute.K ).print ();
-
-		// KeyGeneration keygen = new KeyGeneration ( a, b );
-		// String timestamp = Key.timestamp ();
-		//System.out.println ( keygen.publicKey.export ( timestamp ) );
-		//System.out.println ( keygen.privateKey.export ( timestamp ) );
+		Decimal a = new Decimal ( "282755483533707287054752184321121345766861480697448703443857012153264407439766013042402571" );
+		Decimal b = new Decimal ( "370332600450952648802345609908335058273399487356359263038584017827194636172568988257769601" );
+		KeyGeneration keygen = new KeyGeneration ( a, b );
+		
 
 	}
 
