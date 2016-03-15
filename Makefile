@@ -6,3 +6,5 @@ run:
 
 clean:
 	rm -rf *.class
+	rm -rf ./output/
+	rm -rf example.txt

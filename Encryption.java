@@ -1,6 +1,7 @@
 import java.io.File;
-import java.util.Scanner;
 import java.io.PrintWriter;
+import java.util.Scanner;
+import java.util.ArrayList;
 
 /**
  * Encryption.java - This class takes in a data file as well as a pair of either a private key or a
@@ -107,6 +108,28 @@ public class Encryption {
 		for ( int i = 0; Operation.lessThan ( new Decimal ( Integer.toString ( i ) ), k ); i++ ) {
 			// Save to the processed result
 			processed = Operation.modulo ( Operation.multiply ( processed, original ), n );
+		}
+		// Return the string version of the result
+		return processed.stringify ( 2 );
+	}
+
+	private String process ( String input, boolean debug ) {
+		// Initialize powered reference array of Decimal answers
+		ArrayList <Decimal> reference = new ArrayList <Decimal> ();
+		// Turn into Decimal instance
+		Decimal original = new Decimal ( input );
+		// Initialize the processed output
+		Decimal processed = new Decimal ( "1" );
+		// Initialize iterator
+		Decimal iterator = new Decimal ( "0" );
+		// Loop through k times
+		while ( Operation.lessThan ( iterator, k ) ) {
+			// Save to the processed result
+			processed = Operation.modulo ( Operation.multiply ( processed, original ), n );
+			// Append processed into reference array
+			reference.add ( new Decimal ( processed.stringify () ) );
+			// Increment iterator
+			iterator = Operation.add ( iterator, KeyGeneration.one );
 		}
 		// Return the string version of the result
 		return processed.stringify ( 2 );

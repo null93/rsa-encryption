@@ -401,7 +401,7 @@ public class Display implements ActionListener {
 					if ( this.target != null ) {
 						// Then make the operation buttons enabled
 						getButton ( Button.BLOCK ).setEnabled ( false );
-						getButton ( Button.UNBLOCK ).setEnabled ( true );
+						getButton ( Button.UNBLOCK ).setEnabled ( false );
 						getButton ( Button.ENCRYPT ).setEnabled ( false );
 						getButton ( Button.DECRYPT ).setEnabled ( true );
 					}
@@ -416,7 +416,7 @@ public class Display implements ActionListener {
 						// Then make the operation buttons enabled
 						getButton ( Button.BLOCK ).setEnabled ( true );
 						getButton ( Button.UNBLOCK ).setEnabled ( false );
-						getButton ( Button.ENCRYPT ).setEnabled ( true );
+						getButton ( Button.ENCRYPT ).setEnabled ( false );
 						getButton ( Button.DECRYPT ).setEnabled ( false );
 					}
 				}
@@ -499,7 +499,7 @@ public class Display implements ActionListener {
 			// Enable the operation buttons based on key
 			if ( this.key.type () == Key.Type.PRIVATE ) {
 				getButton ( Button.BLOCK ).setEnabled ( false );
-				getButton ( Button.UNBLOCK ).setEnabled ( true );
+				getButton ( Button.UNBLOCK ).setEnabled ( false );
 				getButton ( Button.ENCRYPT ).setEnabled ( false );
 				getButton ( Button.DECRYPT ).setEnabled ( true );
 			}
@@ -507,7 +507,7 @@ public class Display implements ActionListener {
 			else {
 				getButton ( Button.BLOCK ).setEnabled ( true );
 				getButton ( Button.UNBLOCK ).setEnabled ( false );
-				getButton ( Button.ENCRYPT ).setEnabled ( true );
+				getButton ( Button.ENCRYPT ).setEnabled ( false );
 				getButton ( Button.DECRYPT ).setEnabled ( false );
 			}
 		}
@@ -524,9 +524,18 @@ public class Display implements ActionListener {
 			Block block = new Block ( this.target, 1, this.target );
 			// Report success
 			getTextArea ( TextArea.MESSAGE ).setText ( "Successfully blocked input file" );
-			// Since we blocked, we don't wanna allow user to block again
-			getButton ( Button.BLOCK ).setEnabled ( false );
-			getButton ( Button.UNBLOCK ).setEnabled ( true );
+			// Enable based on key
+			if ( this.key.type () == Key.Type.PRIVATE ) {
+				getButton ( Button.BLOCK ).setEnabled ( false );
+				getButton ( Button.UNBLOCK ).setEnabled ( true );
+				getButton ( Button.DECRYPT ).setEnabled ( false );
+			}
+			// Enable based on key
+			else {
+				getButton ( Button.BLOCK ).setEnabled ( false );
+				getButton ( Button.UNBLOCK ).setEnabled ( true );
+				getButton ( Button.ENCRYPT ).setEnabled ( true );
+			}
 		}
 		// Catch any errors that might be thrown
 		catch ( Exception e ) {
@@ -547,9 +556,18 @@ public class Display implements ActionListener {
 			Unblock block = new Unblock ( this.target, 1, this.target );
 			// Report success
 			getTextArea ( TextArea.MESSAGE ).setText ( "Successfully unblocked input file" );
-			// Since we unblocked, we don't wanna allow user to unblock again
-			getButton ( Button.BLOCK ).setEnabled ( true );
-			getButton ( Button.UNBLOCK ).setEnabled ( false );
+			// Enable based on key
+			if ( this.key.type () == Key.Type.PRIVATE ) {
+				getButton ( Button.BLOCK ).setEnabled ( true );
+				getButton ( Button.UNBLOCK ).setEnabled ( false );
+				getButton ( Button.DECRYPT ).setEnabled ( false );
+			}
+			// Enable based on key
+			else {
+				getButton ( Button.BLOCK ).setEnabled ( true );
+				getButton ( Button.UNBLOCK ).setEnabled ( false );
+				getButton ( Button.ENCRYPT ).setEnabled ( false );
+			}
 		}
 		// Catch any errors that might be thrown
 		catch ( Exception e ) {
@@ -572,6 +590,8 @@ public class Display implements ActionListener {
 			getTextArea ( TextArea.MESSAGE ).setText ( "Successfully encrypted the input file" );
 			// We don't want the user to encrypt twice
 			getButton ( Button.ENCRYPT ).setEnabled ( false );
+			getButton ( Button.UNBLOCK ).setEnabled ( false );
+			getButton ( Button.BLOCK ).setEnabled ( false );
 		}
 		// Try to catch exceptions
 		catch ( RSAException exception ) {
@@ -594,6 +614,8 @@ public class Display implements ActionListener {
 			getTextArea ( TextArea.MESSAGE ).setText ( "Successfully decrypted the input file" );
 			// We don't want the user to decrypt twice
 			getButton ( Button.DECRYPT ).setEnabled ( false );
+			getButton ( Button.BLOCK ).setEnabled ( false );
+			getButton ( Button.UNBLOCK ).setEnabled ( true );
 		}
 		// Try to catch exceptions
 		catch ( RSAException exception ) {
