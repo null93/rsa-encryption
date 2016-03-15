@@ -1,3 +1,8 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.io.PrintWriter;
+
 /**
  * Encryption.java - This class takes in a data file as well as a pair of either a private key or a
  * public key, depending if we are doing encryption or decryption, and operates onto the data
@@ -15,40 +20,82 @@
 public class Encryption {
 
 	/**
+	 * 
+	 */
+	private Decimal n;
+
+	/**
+	 * 
+	 */
+	private Decimal k;
+
+	/**
+	 * 
+	 */
+	private String result;
+
+	/**
 	 *
 	 */
-	protected Encryption () {
-
+	protected Encryption ( Key key, String filepath ) throws RSAException {
+		// Initialize the internal variables
+		this.initialize ( key );
+		// Get File instance by initializing with filepath
+        File file = new File ( filepath );
+ 		// Attempt to use the scanner
+        try {
+        	// Initialize Scanner class
+            Scanner scanner = new Scanner ( file );
+ 			// Loop through until all lines have been read
+            while ( scanner.hasNextLine () ) {
+            	// Save the current line
+                String line = scanner.nextLine ();
+                // Print it out onto the screen
+                this.result += this.process ( line ) + "\n";
+            }
+            // Close the scanner ( And file internally )
+            scanner.close ();
+            System.out.println ( this.result );
+            // Save result back into file
+            PrintWriter output = new PrintWriter ( file );
+    		output.print ( this.result );
+    		// Close printer
+    		output.flush ();
+    		output.close ();
+        }
+        // Attempt to catch throws
+        catch ( Exception exception ) {
+            // If something fails, throw our own exception
+            throw new RSAException ( "Could not encrypt input file." );
+        }
 	}
 
-	public static void main ( String [] args ) {
-		Decimal a = new Decimal ( "2" );
-		Decimal b = new Decimal ( "7" );
-		KeyGeneration keygen = new KeyGeneration ( a, b );
-		Decimal e = new Decimal ( keygen.publicKey.get ( Key.Attribute.K ).stringify () );
-		Decimal d = new Decimal ( keygen.privateKey.get ( Key.Attribute.K ).stringify () );
-		Decimal n = new Decimal ( keygen.publicKey.get ( Key.Attribute.N ).stringify () );
+	/**
+	 * 
+	 */
+	private void initialize ( Key key ) {
+		// Save variables internally
+		this.n = key.get ( Key.Attribute.N );
+		this.k = key.get ( Key.Attribute.K );
+		// Initialize our output stream
+		this.result = "";
+	}
 
-		String timestamp = Key.timestamp ();
-		keygen.publicKey.export ( timestamp );
-		keygen.privateKey.export ( timestamp );
-
-		Decimal original = new Decimal ( "0574820589747450" );
-		Decimal encrypted = new Decimal ( "1" );
-		for ( int i = 0; Operation.lessThan ( new Decimal ( Integer.toString ( i ) ), e ); i++ ) {
-			encrypted = Operation.modulo ( Operation.multiply ( encrypted, original ), n );
+	/**
+	 * 
+	 */
+	private String process ( String input ) {
+		// Turn into Decimal instance
+		Decimal original = new Decimal ( input );
+		// Initialize the processed output
+		Decimal processed = new Decimal ( "1" );
+		// Loop through k times
+		for ( int i = 0; Operation.lessThan ( new Decimal ( Integer.toString ( i ) ), k ); i++ ) {
+			// Save to the processed result
+			processed = Operation.modulo ( Operation.multiply ( processed, original ), n );
 		}
-		original.print ();
-		encrypted.print ();
-
-		original = new Decimal ( "2" );
-		Decimal decrypted = new Decimal ( "1" );
-		for ( int i = 0; Operation.lessThan ( new Decimal ( Integer.toString ( i ) ), d ); i++ ) {
-			decrypted = Operation.modulo ( Operation.multiply ( decrypted, original ), n );
-		}
-
-		original.print ();
-		decrypted.print ();
+		// Return the string version of the result
+		return processed.stringify ();
 	}
 
 }

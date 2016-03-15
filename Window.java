@@ -2,6 +2,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
+import javax.swing.BoxLayout;
 import java.awt.GridBagLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -26,7 +27,8 @@ import java.awt.GridLayout;
 public class Window extends JFrame {
 
 	/**
-	 * This data member stores the panel that is created internally
+	 * This data member stores the panel that is created internally.  It is the main panel that
+	 * handle the rest.
 	 * @var     JPanel          panel           The stored instance of created JPanel
 	 */
 	protected JPanel panel;
@@ -40,13 +42,17 @@ public class Window extends JFrame {
 	 * @param   int             cols            Number of columns in grid
 	 * @param   int             rows            Number of rows in grid
 	 */
-	public Window ( String title, int height, int width, int cols, int rows ) {
+	public Window ( String title, int height, int width ) {
 		// Create a JFrame instance with passed string as title
 		super ( title );
 		// Ensure when we close it, we only close that frame
 		setDefaultCloseOperation ( JFrame.DISPOSE_ON_CLOSE );
 		// Set up the panel
-		setPanel ( rows, cols );
+		this.panel = new JPanel ();
+		// Set the border to be empty, giving the panel padding
+		this.panel.setBorder ( new EmptyBorder ( 10, 10, 10, 10 ) );
+		// Set the layout type
+		this.panel.setLayout ( new BoxLayout ( this.panel, BoxLayout.Y_AXIS ) );
 		// Disable resizing
 		setResizable ( false );
 		// Add Panel to frame
@@ -63,19 +69,19 @@ public class Window extends JFrame {
 	}
 
 	/**
-	 * This function takes in the number of rows and columns and initialized a JPanel and a
-	 * GridLayout.  It then saves that instance internally.
-	 * @param   int             cols            The numbers of columns for the grid
-	 * @param   int             rows            The numbers of rows for the grid
-	 * @return  void
+	 * 
 	 */
-	protected void setPanel ( int cols, int rows ) {
+	protected JPanel addPanel ( int rows, int cols ) {
 		// Make a panel object with passed number of rows and columns
-		this.panel = new JPanel ( new GridLayout ( cols, rows ) );
+		JPanel panel = new JPanel ( new GridLayout ( cols, rows ) );
 		// Set the border to be empty, giving the panel padding
-		this.panel.setBorder ( new EmptyBorder ( 10, 10, 10, 10 ) );
+		panel.setBorder ( new EmptyBorder ( 10, 10, 10, 10 ) );
 		// Set the layout type
-		this.panel.setLayout ( new GridBagLayout () );
+		panel.setLayout ( new GridBagLayout () );
+		// Add the panel internally
+		this.panel.add ( panel );
+		// Return the panel
+		return panel;
 	}
 
 	/**

@@ -32,15 +32,7 @@ public class Unblock {
 	//constructor for the block
 	public Unblock (String inputFile, int val, String outputFile) throws IOException {
 		
-		// make the text file here
-		if(inputFile.endsWith("txt") != true){
-			
-		    fileName = inputFile.concat(".txt");
-		}
-        if(outputFile.endsWith("txt") != true){
-			
-		    outputFile = outputFile.concat(".txt");
-		}
+		fileName = inputFile;
         // make a new file for output
         oFile = new File(outputFile);
         // here because each value has two char we multiple by 2

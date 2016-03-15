@@ -70,22 +70,6 @@ public class Prime {
 	}
 
 	/**
-	 * This function is static, and determines if the Decimal instance is a prime number.
-	 * @param   Decimal 		target				The Decimal instance to evaluate primality
-	 * @return  Boolean 							Is the target Decimal instance prime?
-	 * @static
-	 */
-	protected static boolean isPrime ( Decimal target ) {
-		Decimal iterator = new Decimal ( target.stringify () );
-		Decimal lhs = new Decimal ( "1" );
-		while ( Operation.greaterThan ( iterator, new Decimal ( "3" ) ) ) {
-			lhs = Operation.multiply ( new Decimal ( "2" ), lhs );
-			iterator = Operation.subtract ( iterator, new Decimal ( "1" ) );
-		}
-		return false;
-	}
-
-	/**
 	 * This function returns a Decimal representation of a huge unsigned prime integer.  This number
 	 * is derived from a resource file that is specified in the internal variables.
 	 * @return 	Decimal 							A random prime number from resource file

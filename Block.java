@@ -31,22 +31,13 @@ public class Block {
 	
 	//constructor for the block
 	public Block (String inputFile, int val, String outputFile) throws IOException {
-		
-		// make the text file here
-		if(inputFile.endsWith("txt") != true){
-			
-		    fileName = inputFile.concat(".txt");
-		}
-        if(outputFile.endsWith("txt") != true){
-			
-		    outputFile = outputFile.concat(".txt");
-		}
          oFile = new File(outputFile);
 		blocksize = val*2;
 		storeMsg = "";
+		fileName = inputFile;
 		// method to convert the message
-		if(fileName != null){
-			System.out.println(fileName);
+		if(inputFile != null){
+			System.out.println(inputFile);
 			makeMessage();
 			writeMsg();
 		}

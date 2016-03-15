@@ -18,11 +18,11 @@ public class RSA {
 	 */
 	public static void main ( String [] args ) {
 
-		new GUI ();
+		new Display ();
 
 		Decimal a = new Decimal ( "282755483533707287054752184321121345766861480697448703443857012153264407439766013042402571" );
 		Decimal b = new Decimal ( "370332600450952648802345609908335058273399487356359263038584017827194636172568988257769601" );
-		KeyGeneration keygen = new KeyGeneration ( a, b );
+		//KeyGeneration keygen = new KeyGeneration ( a, b );
 		
 
 	}

@@ -159,7 +159,7 @@ public class Key {
 	 * @param   String          filepath            Filepath to the input Key file
 	 * @throws  RSAException                        If required data is not read by the end
 	 */
-	protected Key ( String filepath ) {
+	protected Key ( String filepath ) throws RSAException {
 		// Make sure the output folder exists
 		this.checkFile ( Key.folder, "." );
 		// Try to parse the input XML file
@@ -216,8 +216,8 @@ public class Key {
 		}
 		// Try to catch the thrown exception
 		catch ( Exception exception ) {
-			// On error we want to exit the program, because this is critical
-			System.exit ( 0 );
+			// On error we want to do nothing since we want to catch the RSA error outside the scope
+			throw new RSAException ( "Could not parse key file." );
 		}
 	}
 
@@ -253,6 +253,7 @@ public class Key {
 	 * @return  Key.Type                            The type of key represented as a Type enum
 	 */
 	protected Key.Type type () {
+		// Return the key type
 		return this.type;
 	}
 
