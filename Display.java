@@ -1,26 +1,18 @@
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JTextArea;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.border.EmptyBorder;
-import javax.swing.BoxLayout;
+import javax.swing.JFileChooser;
+import javax.swing.BorderFactory;
 import java.awt.GridBagLayout;
 import java.awt.Font;
 import java.awt.Color;
-import java.awt.Toolkit;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import javax.swing.JFileChooser;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.PrintWriter;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.BorderFactory;
 
 /**
  * Display.java - This class handles displaying the initial options menu to the user as well as walking
@@ -41,37 +33,48 @@ import javax.swing.BorderFactory;
 public class Display implements ActionListener {
 
 	/**
-	 * 
+	 * This data member holds the instance of the window frame in order for action functions to call
+	 * it in the future after creation.
+	 * @var     Window          frame               An instance of Window which extends from JFrame
 	 */
 	private Window frame;
 
 	/**
-	 * 
+	 * This data member is a handle that references the main JPanel that all other JPanels belong to
+	 * @var     JPanel          panel               Main JPanel inside Window instance
 	 */
 	private JPanel panel;
 
 	/**
-	 * 
+	 * This data member holds all the buttons needed in this GUI.  It is an array for modularization
+	 * purposes.
+	 * @var     JButton []      buttons             Array of buttons in our GUI
 	 */
 	private JButton [] buttons;
 
 	/**
-	 * 
+	 * This data member holds all the text areas needed in the GUI.  It is an array for
+	 * modularization purposes.
+	 * @var     JTextArea []    textAreas           Array of text areas in our GUI
 	 */
 	private JTextArea [] textAreas;
 
 	/**
-	 * 
+	 * This data member holds the currently loaded key and holds the reference to it.
+	 * @var     Key             key                 The currently loaded key
 	 */
 	private Key key;
 
 	/**
-	 * the filepath of the file to operate on
+	 * This data member holds the path name as a string to the currently selected file.
+	 * @var     String          target              The currently selected file
 	 */
-	private String target;
+	private String target = null;
 
 	/**
-	 * 
+	 * This enum is used to refer to buttons and binds the enum index to the index in the buttons
+	 * data member.
+	 * @enum    Button                              Types of buttons in GUI
 	 */
 	private enum Button {
 		LOAD,
@@ -84,7 +87,9 @@ public class Display implements ActionListener {
 	}
 
 	/**
-	 * 
+	 * This enum is used to refer to text areas and binds the enum index to the index in the
+	 * textAreas data member.
+	 * @enum    TextArea                            Types of text areas in GUI
 	 */
 	protected enum TextArea {
 		KEYSTATUS,
@@ -93,7 +98,8 @@ public class Display implements ActionListener {
 	}
 
 	/**
-	 * 
+	 * This constructor initializes the buttons and text areas array, as well as creates a Window
+	 * instance and populates it with created buttons and text elements.
 	 */
 	public Display () {
 
@@ -102,7 +108,7 @@ public class Display implements ActionListener {
 			File file = new File("./example.txt");
 			file.getParentFile().mkdirs();
 			PrintWriter printWriter = new PrintWriter(file);
-			printWriter.print ("hello there");
+			printWriter.print ("Hello\n\nWorld!");
 			printWriter.flush ();
 			printWriter.close ();
 		}
@@ -201,7 +207,10 @@ public class Display implements ActionListener {
 	}
 
 	/**
-	 * 
+	 * This class is used to set a passed button to the array of buttons based on the passed enum.
+	 * @param   JButton         button              The button to add
+	 * @param   Button          type                Used to determine which index in the array
+	 * @return  void
 	 */
 	protected void setButton ( JButton button, Button type ) {
 		// Get the index of the enum
@@ -211,7 +220,11 @@ public class Display implements ActionListener {
 	}
 
 	/**
-	 * 
+	 * This class is used to set a passed text area to the array of text areas based on the passed
+	 * enum.
+	 * @param   JTextArea       button              The text area to add
+	 * @param   TextArea        type                Used to determine which index in the array
+	 * @return  void
 	 */
 	protected void setTextArea ( JTextArea textArea, TextArea type ) {
 		// Get the index of the enum
@@ -221,7 +234,9 @@ public class Display implements ActionListener {
 	}
 
 	/**
-	 * 
+	 * This function is a getter function that returns a button reference based on passed enum.
+	 * @param   Button          type                Which button to return based on index
+	 * @return  JButton                             The button that will be returned
 	 */
 	private JButton getButton ( Button type ) {
 		// Get the index of the enum
@@ -231,7 +246,9 @@ public class Display implements ActionListener {
 	}
 
 	/**
-	 * 
+	 * This function is a getter function that returns a text area reference based on passed enum.
+	 * @param   TextArea        type                Which text area to return based on index
+	 * @return  JTextArea                           The text area that will be returned
 	 */
 	private JTextArea getTextArea ( TextArea type ) {
 		// Get the index of the enum
@@ -241,7 +258,13 @@ public class Display implements ActionListener {
 	}
 
 	/**
-	 * 
+	 * This class creates a JButton based on some information that is passed, it exists to free
+	 * cluttered repetitive code.
+	 * @param   String          name                The value of the button
+	 * @param   int             width               The width of the button
+	 * @param   int             height              The height of the button
+	 * @param   Button          type                The type of button
+	 * @return  JButton                             The end resulting button
 	 */
 	private JButton createButton ( String name, int width, int height, Button type ) {
 		// Create a new button and set the name
@@ -266,7 +289,14 @@ public class Display implements ActionListener {
 	}
 
 	/**
-	 * 
+	 * This class creates a JTextArea based on some information that is passed, it exists to free
+	 * cluttered repetitive code.
+	 * @param   String          value               The value inside text field
+	 * @param   int             rows                The number of rows
+	 * @param   int             cols                The number of columns
+	 * @param   int             fontsize            The font size for the text area
+	 * @param   TextArea        type                The type of text area as enum
+	 * @return  JTextArea                           The end result instance of JTextArea
 	 */
 	private JTextArea createTextArea ( String value, int rows, int cols, int fontsize, TextArea type ) {
 		// Initialize a new text area
@@ -279,11 +309,11 @@ public class Display implements ActionListener {
 		text.setText ( value );
 		// Create a white border, giving the text area padding
 		text.setBorder ( BorderFactory.createCompoundBorder (
-			text.getBorder (), 
+			text.getBorder (),
 			BorderFactory.createEmptyBorder ( 10, 10, 10, 10 ) )
 		);
 		// Set the font size
-		Font font1 = new Font ( "Helvetica", Font.PLAIN, fontsize );	
+		Font font1 = new Font ( "Helvetica", Font.PLAIN, fontsize );
 		text.setFont ( font1 );
 		setTextArea ( text, type );
 		// Return the resulting text area
@@ -291,7 +321,11 @@ public class Display implements ActionListener {
 	}
 
 	/**
-	 * 
+	 * This function is inherited from th ActionListener class and redirects button presses with the
+	 * appropriate action functions defined below.
+	 * @param   ActionEvent     e                   The event that was triggered
+	 * @return  void
+	 * @see     ActionListener
 	 */
 	public void actionPerformed ( ActionEvent e ) {
 		// Check to see if we clicked the load button
@@ -335,6 +369,11 @@ public class Display implements ActionListener {
 		}
 	}
 
+	/**
+	 * This function handles the event when the load button is clicked.  Ideally it loads in a
+	 * previously generated key.
+	 * @return  void
+	 */
 	private void actionLoad () {
 		// Initialize a file chooser
 		JFileChooser chooser = new JFileChooser ();
@@ -380,6 +419,11 @@ public class Display implements ActionListener {
 		}
 	}
 
+	/**
+	 * This function is triggered when a user clicks in the create button.  Ideally it creates a
+	 * set of keys, public and private, and is reported to the user.
+	 * @return  void
+	 */
 	private void actionCreate () {
 		// First things first, we want to disable any file actions
 		getButton ( Button.BLOCK ).setEnabled ( false );
@@ -412,6 +456,11 @@ public class Display implements ActionListener {
 		getButton ( Button.OPEN ).setEnabled ( true );
 	}
 
+	/**
+	 * This function is triggered when the open button is clicked.  This will prompt the user to
+	 * select a file to be operated on.
+	 * @return  void
+	 */
 	private void actionOpen () {
 		// Initialize a file chooser
 		JFileChooser chooser = new JFileChooser ();
@@ -444,12 +493,16 @@ public class Display implements ActionListener {
 			getButton ( Button.UNBLOCK ).setEnabled ( true );
 		}
 	}
-
+	/**
+	 * This function is triggered when a user clicks on the block button, and ideally it does it's
+	 * desired behavior.
+	 * @return  void
+	 */
 	private void actionBlock () {
 		// Try to block input file
 		try {
 			// Attempt to block message
-			Block block = new Block ( this.target, 2, this.target );
+			Block block = new Block ( this.target, 1, this.target );
 			// Report success
 			getTextArea ( TextArea.MESSAGE ).setText ( "Successfully blocked input file" );
 			// Since we blocked, we don't wanna allow user to block again
@@ -463,11 +516,16 @@ public class Display implements ActionListener {
 		}
 	}
 
+	/**
+	 * This function is triggered when a user clicks on the unblock button, and ideally it does it's
+	 * desired behavior.
+	 * @return  void
+	 */
 	private void actionUnblock () {
 		// Try to unblock input file
 		try {
 			// Attempt to unblock message
-			Unblock block = new Unblock ( this.target, 2, this.target );
+			Unblock block = new Unblock ( this.target, 1, this.target );
 			// Report success
 			getTextArea ( TextArea.MESSAGE ).setText ( "Successfully unblocked input file" );
 			// Since we unblocked, we don't wanna allow user to unblock again
@@ -481,6 +539,11 @@ public class Display implements ActionListener {
 		}
 	}
 
+	/**
+	 * This function is triggered when a user tries to encrypt a file.  Ideally it does it's desired
+	 * behavior and reports results to the user.
+	 * @return  void
+	 */
 	private void actionEncrypt () {
 		// Try to encrypt the file
 		try {
@@ -498,6 +561,11 @@ public class Display implements ActionListener {
 		}
 	}
 
+	/**
+	 * This function is triggered when a user tries to decrypt a file.  Ideally it does it's desired
+	 * behavior and reports results to the user.
+	 * @return  void
+	 */
 	private void actionDecrypt () {
 		// Try to decrypt the file
 		try {

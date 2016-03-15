@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.io.PrintWriter;
 
@@ -20,58 +19,70 @@ import java.io.PrintWriter;
 public class Encryption {
 
 	/**
-	 * 
+	 * This data member holds n instance referenced from the key that was passed to the constructor.
+	 * @var     Decimal         n                   The multiple of primes p and q
 	 */
 	private Decimal n;
 
 	/**
-	 * 
+	 * This data member holds an instance referenced from the key that was passed to the
+	 * constructor.  This instance is either the encryption key of the decryption key.  We will
+	 * refer to it as simply k.
+	 * @var     Decimal         k                   The encryption or decryption key
 	 */
 	private Decimal k;
 
 	/**
-	 * 
+	 * This is a string that holds the processed result.  This sting is later written back into the
+	 * input file.
 	 */
 	private String result;
 
 	/**
-	 *
+	 * This is the constructor and it takes in an encryption key and a filepath.  This constructor
+	 * is the driver function for the encryption and everything happens here.
+	 * @param   Key             key                 Which key to use fro processing
+	 * @param   String          filepath            The filepath to the input file
+	 * @throw   RSAExeption                         We throw so calling class knew about all errors
 	 */
 	protected Encryption ( Key key, String filepath ) throws RSAException {
 		// Initialize the internal variables
 		this.initialize ( key );
 		// Get File instance by initializing with filepath
-        File file = new File ( filepath );
- 		// Attempt to use the scanner
-        try {
-        	// Initialize Scanner class
-            Scanner scanner = new Scanner ( file );
- 			// Loop through until all lines have been read
-            while ( scanner.hasNextLine () ) {
-            	// Save the current line
-                String line = scanner.nextLine ();
-                // Print it out onto the screen
-                this.result += this.process ( line ) + "\n";
-            }
-            // Close the scanner ( And file internally )
-            scanner.close ();
-            System.out.println ( this.result );
-            // Save result back into file
-            PrintWriter output = new PrintWriter ( file );
-    		output.print ( this.result );
-    		// Close printer
-    		output.flush ();
-    		output.close ();
-        }
-        // Attempt to catch throws
-        catch ( Exception exception ) {
-            // If something fails, throw our own exception
-            throw new RSAException ( "Could not encrypt input file." );
-        }
+		File file = new File ( filepath );
+		// Attempt to use the scanner
+		try {
+			// Initialize Scanner class
+			Scanner scanner = new Scanner ( file );
+			// Loop through until all lines have been read
+			while ( scanner.hasNextLine () ) {
+				// Save the current line
+				String line = scanner.nextLine ();
+				// Print it out onto the screen
+				this.result += this.process ( line ) + "\n";
+			}
+			// Close the scanner ( And file internally )
+			scanner.close ();
+			System.out.println ( this.result );
+			// Save result back into file
+			PrintWriter output = new PrintWriter ( file );
+			output.print ( this.result );
+			// Close printer
+			output.flush ();
+			output.close ();
+		}
+		// Attempt to catch throws
+		catch ( Exception exception ) {
+			// If something fails, throw our own exception
+			throw new RSAException ( "Could not encrypt input file." );
+		}
 	}
 
 	/**
-	 * 
+	 * This function initializes the internal data members with default values based on the key that
+	 * is passed.
+	 * @param   Key             key                 The key that is passed from the constructor
+	 * @return  void
 	 */
 	private void initialize ( Key key ) {
 		// Save variables internally
@@ -82,7 +93,10 @@ public class Encryption {
 	}
 
 	/**
-	 * 
+	 * This function preforms the actual encryption / decryption and returns a padded string
+	 * representation of the result.
+	 * @param   String          input               The input string to process
+	 * @return  String                              The padded result string representation
 	 */
 	private String process ( String input ) {
 		// Turn into Decimal instance
@@ -95,7 +109,7 @@ public class Encryption {
 			processed = Operation.modulo ( Operation.multiply ( processed, original ), n );
 		}
 		// Return the string version of the result
-		return processed.stringify ();
+		return processed.stringify ( 2 );
 	}
 
 }

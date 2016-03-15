@@ -160,6 +160,24 @@ public class Decimal {
 	}
 
 	/**
+	 * This is the overloaded function for the stringify method.  In addition to the original method
+	 * it also makes sure the returned string is padded by a specified amount of zeros in the front.
+	 * @param   int             padding             The amount of padding required
+	 * @return  String                              Padded sting that represents decimal
+	 */
+	protected String stringify ( int padding ) {
+		// Get the result
+		String result = this.stringify ();
+		// Loop through until desired size is met
+		while ( result.length () < padding ) {
+			// Append a zero to the result
+			result = "0" + result;
+		}
+		// Return the resulting string
+		return result;
+	}
+
+	/**
 	 * This function prints out the huge unsigned integer to standard output.  This function is used
 	 * primarily for debugging and thus protected.
 	 * @return  void
