@@ -386,31 +386,44 @@ public class Display implements ActionListener {
 		// Initialize opening the window
 		if ( chooser.showOpenDialog ( this.frame ) == JFileChooser.OPEN_DIALOG ) {
 			// Save the target path of the file
-			this.target = chooser.getSelectedFile ().getAbsolutePath ();
+			String target = chooser.getSelectedFile ().getAbsolutePath ();
+			// Try to load key from file
 			try {
 				// Initialize a new key class by passing in the loaded file
-				Key key = new Key ( this.target );
+				Key key = new Key ( target );
 				// Set the key type in the key status text field
 				if ( key.type () == Key.Type.PRIVATE ) {
 					// Change the key status field
 					getTextArea ( TextArea.KEYSTATUS ).setText ( "Private Key Loaded" );
 					// Report success
 					getTextArea ( TextArea.MESSAGE ).setText ( "Private key loaded Successfully" );
+					// See if target file is loaded
+					if ( this.target != null ) {
+						// Then make the operation buttons enabled
+						getButton ( Button.BLOCK ).setEnabled ( false );
+						getButton ( Button.UNBLOCK ).setEnabled ( true );
+						getButton ( Button.ENCRYPT ).setEnabled ( false );
+						getButton ( Button.DECRYPT ).setEnabled ( true );
+					}
 				}
 				else {
 					// Change the key status field
 					getTextArea ( TextArea.KEYSTATUS ).setText ( "Public Key Loaded" );
 					// Report success
 					getTextArea ( TextArea.MESSAGE ).setText ( "Private key loaded Successfully" );
+					// See if target file is loaded
+					if ( this.target != null ) {
+						// Then make the operation buttons enabled
+						getButton ( Button.BLOCK ).setEnabled ( true );
+						getButton ( Button.UNBLOCK ).setEnabled ( false );
+						getButton ( Button.ENCRYPT ).setEnabled ( true );
+						getButton ( Button.DECRYPT ).setEnabled ( false );
+					}
 				}
 				// Save key internally
 				this.key = key;
-				// Enable the open button and disable the rest
+				// Enable the open file either way
 				getButton ( Button.OPEN ).setEnabled ( true );
-				getButton ( Button.BLOCK ).setEnabled ( false );
-				getButton ( Button.UNBLOCK ).setEnabled ( false );
-				getButton ( Button.ENCRYPT ).setEnabled ( false );
-				getButton ( Button.DECRYPT ).setEnabled ( false );
 			}
 			catch ( RSAException exception ) {
 				// If an invalid key file was passed, then we report it
@@ -448,10 +461,15 @@ public class Display implements ActionListener {
 		getTextArea ( TextArea.KEYSTATUS ).setText ( "Public Key Loaded" );
 		// Update the log to say this as well
 		getTextArea ( TextArea.MESSAGE ).setText (
-			"Successfully created keys...\n" +
+			"Successfully created keys and loaded public key...\n" +
 			"p = " + a.stringify () + "\n" +
 			"q = " + b.stringify () + "\n"
 		);
+		// Check if the target file is loaded, if it is enable blocking and encrypting
+		if ( this.target != null ) {
+			getButton ( Button.BLOCK ).setEnabled ( true );
+			getButton ( Button.ENCRYPT ).setEnabled ( true );
+		}
 		// Release the target form being disabled
 		getButton ( Button.OPEN ).setEnabled ( true );
 	}
@@ -480,17 +498,18 @@ public class Display implements ActionListener {
 			getTextArea ( TextArea.MESSAGE ).setText ( "Opened file: " + this.target );
 			// Enable the operation buttons based on key
 			if ( this.key.type () == Key.Type.PRIVATE ) {
+				getButton ( Button.BLOCK ).setEnabled ( false );
+				getButton ( Button.UNBLOCK ).setEnabled ( true );
 				getButton ( Button.ENCRYPT ).setEnabled ( false );
 				getButton ( Button.DECRYPT ).setEnabled ( true );
 			}
 			// If its a public key we can not encrypt
 			else {
+				getButton ( Button.BLOCK ).setEnabled ( true );
+				getButton ( Button.UNBLOCK ).setEnabled ( false );
 				getButton ( Button.ENCRYPT ).setEnabled ( true );
 				getButton ( Button.DECRYPT ).setEnabled ( false );
 			}
-			// Enable the rest of the operation
-			getButton ( Button.BLOCK ).setEnabled ( true );
-			getButton ( Button.UNBLOCK ).setEnabled ( true );
 		}
 	}
 	/**
