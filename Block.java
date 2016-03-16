@@ -37,7 +37,6 @@ public class Block {
 		fileName = inputFile;
 		// method to convert the message
 		if(inputFile != null){
-			System.out.println(inputFile);
 			makeMessage();
 			writeMsg();
 		}
@@ -54,14 +53,28 @@ public class Block {
 		FileReader inputfile = new FileReader(fileName);
 		// variable to store each read from the file
 		int readval;
-	
+		String temp = "";
 		try {
 			while((readval = inputfile.read()) != -1){
-				
 				// check if a special arr
-				String temp = "";
-				if(spl_ascii(readval,temp)== 1){
-					System.out.println(temp + readval);
+				if(readval == 10){
+					temp = "03";
+					storeMsg = storeMsg +temp;
+				}
+				else if(readval == 11){
+					temp = "01";
+					storeMsg = storeMsg +temp;
+				}
+				else if(readval == 0){
+					temp = "00";
+					storeMsg = storeMsg +temp;
+				}
+				else if(readval == 9){
+					temp = "02";
+					storeMsg = storeMsg +temp;
+				}
+				else if(readval == 13){
+					temp = "04";
 					storeMsg = storeMsg +temp;
 				}
 				else{
@@ -76,7 +89,6 @@ public class Block {
 					}
 					// put combine the string
 					storeMsg = storeMsg +temp;
-					System.out.println(storeMsg);
 				}
 			}
 		}
@@ -124,7 +136,6 @@ public class Block {
 		int strlen = storeMsg.length();
 		// place hlder for holding the string length
 		int hold = storeMsg.length();
-		System.out.println("intial lengh:"+strlen);
 		int c = 0;
 		int range = blocksize;
 		while(strlen > blocksize){
@@ -132,18 +143,12 @@ public class Block {
 			w.newLine();
 			c= c+blocksize;
 			strlen=strlen-blocksize;
-			System.out.println(strlen);
 		}
-		System.out.println(strlen);
-		
 		
 		// mean padding requires
 		if(strlen > 0){
-			System.out.println("after adding"+strlen);
 			int left = blocksize - strlen;
 			String leftstr = storeMsg.substring(hold-strlen);
-			System.out.println("string left to copoy"+strlen);
-			System.out.println(left);
 			for(int i = 0 ;i<left;i++){
 				leftstr = "0"+ leftstr;
 			}

@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -40,7 +39,6 @@ public class Unblock {
 		storeMsg = "";
 		// method to convert the message
 		if(fileName != null){
-			System.out.println(fileName);
 			readMessage();
 			writenewMsg();
 		}
@@ -63,18 +61,14 @@ public class Unblock {
 		line = new BufferedReader(new FileReader(fileName));
 		// while there is no more line 
 		while((currLine = line.readLine()) != null){
-			System.out.println("the current line is:  "+ currLine);
 			for(int i = 0; i< blocksize;i=i+2){
 				temp = currLine.substring(i,i+2);
-				System.out.println("got temp = " + temp);
 				// if one of the special case
 					// to check if the value is one of the variable
 					if(temp.startsWith("0")){
 						temp = temp.substring(1);
 					}
-					System.out.println("after sub  :"+temp);
 					int tempval = Integer.parseInt(temp);
-					
 					// if there is no padding
 					if(tempval != 0){
 						if(tempval == 1){
@@ -96,9 +90,8 @@ public class Unblock {
 						else {
 							int val2 = tempval + 27;
 							char[] char1 = Character.toChars(val2);
-							temp = String.valueOf(char1);
-							System.out.println(temp);
 							//to add in the store string
+							temp = String.valueOf(char1);
 						}
 						make = true;
 				   }
@@ -107,11 +100,9 @@ public class Unblock {
 				//keep adding to back
 				if(make == true){
 					storeMsg = storeMsg +temp;
-					System.out.println(storeMsg);
 					make= false;
 				}
 			}
-			
 		}
 	}
 	
