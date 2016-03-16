@@ -64,7 +64,6 @@ public class Encryption {
 			}
 			// Close the scanner ( And file internally )
 			scanner.close ();
-			System.out.println ( this.result );
 			// Save result back into file
 			PrintWriter output = new PrintWriter ( file );
 			output.print ( this.result );
