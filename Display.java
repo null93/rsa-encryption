@@ -73,7 +73,7 @@ public class Display implements ActionListener {
 
 	/**
 	 * This data member is static an final, it represents the blocking size and is immutable
-	 * @var 	int 			blocking 			The blocking size
+	 * @var     int             blocking            The blocking size
 	 */
 	protected static final int blocking = 8;
 
@@ -155,7 +155,7 @@ public class Display implements ActionListener {
 		// Add a new panel as a title for blocking and encryption
 		JPanel row5 = frame.addPanel ( 3, 1 );
 		row5.add (
-			frame.bold ( new JLabel ( "Preform Blocking" ) ),
+			frame.bold ( new JLabel ( "Perform Blocking:" ) ),
 			frame.options ( 0, 0, 1.0, 1.0, GridBagConstraints.WEST )
 		);
 		row5.add (
@@ -163,7 +163,7 @@ public class Display implements ActionListener {
 			frame.options ( 1, 0, 3.0, 1.0, GridBagConstraints.CENTER )
 		);
 		row5.add (
-			frame.bold ( new JLabel ( "Preform Encryption" ) ),
+			frame.bold ( new JLabel ( "Perform Encryption:" ) ),
 			frame.options ( 2, 0, 1.0, 1.0, GridBagConstraints.WEST )
 		);
 		// Add a new panel to display all the buttons for blocking and encryption
@@ -390,7 +390,7 @@ public class Display implements ActionListener {
 					// Change the key status field
 					getTextArea ( TextArea.KEYSTATUS ).setText ( "Private Key Loaded" );
 					// Report success
-					getTextArea ( TextArea.MESSAGE ).setText ( "Private key loaded Successfully" );
+					getTextArea ( TextArea.MESSAGE ).setText ( "Private Key Loaded Successfully" );
 					// See if target file is loaded
 					if ( this.target != null ) {
 						// Then make the operation buttons enabled
@@ -404,7 +404,7 @@ public class Display implements ActionListener {
 					// Change the key status field
 					getTextArea ( TextArea.KEYSTATUS ).setText ( "Public Key Loaded" );
 					// Report success
-					getTextArea ( TextArea.MESSAGE ).setText ( "Private key loaded Successfully" );
+					getTextArea ( TextArea.MESSAGE ).setText ( "Private Key Loaded Successfully" );
 					// See if target file is loaded
 					if ( this.target != null ) {
 						// Then make the operation buttons enabled
@@ -421,7 +421,7 @@ public class Display implements ActionListener {
 			}
 			catch ( RSAException exception ) {
 				// If an invalid key file was passed, then we report it
-				getTextArea ( TextArea.MESSAGE ).setText ( "Invalid key file selected" );
+				getTextArea ( TextArea.MESSAGE ).setText ( "Invalid Key File Selected" );
 			}
 		}
 	}
@@ -455,7 +455,7 @@ public class Display implements ActionListener {
 		getTextArea ( TextArea.KEYSTATUS ).setText ( "Public Key Loaded" );
 		// Update the log to say this as well
 		getTextArea ( TextArea.MESSAGE ).setText (
-			"Successfully created keys and loaded public key...\n" +
+			"Successfully Created Keys and Loaded Public Key...\n\n" +
 			"p = " + a.stringify () + "\n" +
 			"q = " + b.stringify () + "\n"
 		);
@@ -489,7 +489,7 @@ public class Display implements ActionListener {
 			// Display the file path
 			getTextArea ( TextArea.FILEPATH ).setText ( chooser.getSelectedFile ().getName () );
 			// Display a message in the log
-			getTextArea ( TextArea.MESSAGE ).setText ( "Opened file: " + this.target );
+			getTextArea ( TextArea.MESSAGE ).setText ( "Opened File: " + this.target );
 			// Enable the operation buttons based on key
 			if ( this.key.type () == Key.Type.PRIVATE ) {
 				getButton ( Button.BLOCK ).setEnabled ( false );
@@ -517,7 +517,7 @@ public class Display implements ActionListener {
 			// Attempt to block message
 			Block block = new Block ( this.target, Display.blocking, this.target );
 			// Report success
-			getTextArea ( TextArea.MESSAGE ).setText ( "Successfully blocked input file" );
+			getTextArea ( TextArea.MESSAGE ).setText ( "Successfully Blocked Input File" );
 			// Enable based on key
 			if ( this.key.type () == Key.Type.PRIVATE ) {
 				getButton ( Button.BLOCK ).setEnabled ( false );
@@ -534,7 +534,7 @@ public class Display implements ActionListener {
 		// Catch any errors that might be thrown
 		catch ( Exception e ) {
 			// If any are thrown, then report as failure
-			getTextArea ( TextArea.MESSAGE ).setText ( "Failed to block input file" );
+			getTextArea ( TextArea.MESSAGE ).setText ( "Failed To Block Input File" );
 		}
 	}
 
@@ -549,7 +549,7 @@ public class Display implements ActionListener {
 			// Attempt to unblock message
 			Unblock block = new Unblock ( this.target, Display.blocking, this.target );
 			// Report success
-			getTextArea ( TextArea.MESSAGE ).setText ( "Successfully unblocked input file" );
+			getTextArea ( TextArea.MESSAGE ).setText ( "Successfully Unblocked Input File" );
 			// Enable based on key
 			if ( this.key.type () == Key.Type.PRIVATE ) {
 				getButton ( Button.BLOCK ).setEnabled ( true );
@@ -566,7 +566,7 @@ public class Display implements ActionListener {
 		// Catch any errors that might be thrown
 		catch ( Exception e ) {
 			// If any are thrown, then report as failure
-			getTextArea ( TextArea.MESSAGE ).setText ( "Failed to unblock input file" );
+			getTextArea ( TextArea.MESSAGE ).setText ( "Failed To Unblock Input File" );
 		}
 	}
 
@@ -581,7 +581,7 @@ public class Display implements ActionListener {
 			// Initialize the Encryption class and pass info
 			Encryption encrypt = new Encryption ( this.key, this.target );
 			// Alert with success
-			getTextArea ( TextArea.MESSAGE ).setText ( "Successfully encrypted the input file" );
+			getTextArea ( TextArea.MESSAGE ).setText ( "Successfully Encrypted The Input File" );
 			// We don't want the user to encrypt twice
 			getButton ( Button.ENCRYPT ).setEnabled ( false );
 			getButton ( Button.UNBLOCK ).setEnabled ( false );
@@ -590,7 +590,7 @@ public class Display implements ActionListener {
 		// Try to catch exceptions
 		catch ( RSAException exception ) {
 			// If we catch an exception, report error
-			getTextArea ( TextArea.MESSAGE ).setText ( "Failed to encrypt the input file" );
+			getTextArea ( TextArea.MESSAGE ).setText ( "Failed To Encrypt The Input File" );
 		}
 	}
 
@@ -600,12 +600,14 @@ public class Display implements ActionListener {
 	 * @return  void
 	 */
 	private void actionDecrypt () {
+		// Print that we are attempting to decrypt
+		getTextArea ( TextArea.MESSAGE ).setText ( "Decrypting Input File..." );
 		// Try to decrypt the file
 		try {
 			// Initialize the Encryption class and pass info
 			Encryption encrypt = new Encryption ( this.key, this.target );
 			// Alert with success
-			getTextArea ( TextArea.MESSAGE ).setText ( "Successfully decrypted the input file" );
+			getTextArea ( TextArea.MESSAGE ).setText ( "Successfully Decrypted The Input File" );
 			// We don't want the user to decrypt twice
 			getButton ( Button.DECRYPT ).setEnabled ( false );
 			getButton ( Button.BLOCK ).setEnabled ( false );
@@ -614,7 +616,7 @@ public class Display implements ActionListener {
 		// Try to catch exceptions
 		catch ( RSAException exception ) {
 			// If we catch an exception, report error
-			getTextArea ( TextArea.MESSAGE ).setText ( "Failed to decrypt the input file" );
+			getTextArea ( TextArea.MESSAGE ).setText ( "Failed To Decrypt The Input File" );
 		}
 	}
 
