@@ -59,7 +59,7 @@ public class Encryption {
 			while ( scanner.hasNextLine () ) {
 				// Save the current line
 				String line = scanner.nextLine ();
-				// Print it out onto the screen
+				// Append to the result
 				this.result += this.process ( line ) + "\n";
 			}
 			// Close the scanner ( And file internally )
@@ -100,39 +100,28 @@ public class Encryption {
 	 * @return  String                              The padded result string representation
 	 */
 	private String process ( String input ) {
-		// Turn into Decimal instance
-		Decimal original = new Decimal ( input );
 		// Initialize the processed output
-		Decimal processed = new Decimal ( "1" );
-		// Loop through k times
-		for ( int i = 0; Operation.lessThan ( new Decimal ( Integer.toString ( i ) ), k ); i++ ) {
-			// Save to the processed result
-			processed = Operation.modulo ( Operation.multiply ( processed, original ), n );
+		Decimal processed = new Decimal ( input );
+		// Initialize cleanup variable
+		Decimal cleanup = new Decimal ( "1" );
+		// Initialize exponent variable
+		Decimal exponent = new Decimal ( k.stringify () );
+		// Do an initial modulo
+		processed = Operation.modulo ( processed, n );
+		// Loop until the exponent
+		while ( Operation.greaterThan ( exponent, Decimal.zero ) ) {
+			// Check if the exponent is odd
+			if ( !Operation.isEven ( exponent ) ) {
+				// Accumulate to the cleanup
+				cleanup = Operation.modulo ( Operation.multiply ( cleanup, processed ), n );
+			}
+			// Divide exponent by two
+			exponent = Operation.divide ( exponent, new Decimal ( "2" ) );
+			// Accumulate to the processed
+			processed = Operation.modulo ( Operation.multiply ( processed, processed ), n );
 		}
 		// Return the string version of the result
-		return processed.stringify ( 2 );
-	}
-
-	private String process ( String input, boolean debug ) {
-		// Initialize powered reference array of Decimal answers
-		ArrayList <Decimal> reference = new ArrayList <Decimal> ();
-		// Turn into Decimal instance
-		Decimal original = new Decimal ( input );
-		// Initialize the processed output
-		Decimal processed = new Decimal ( "1" );
-		// Initialize iterator
-		Decimal iterator = new Decimal ( "0" );
-		// Loop through k times
-		while ( Operation.lessThan ( iterator, k ) ) {
-			// Save to the processed result
-			processed = Operation.modulo ( Operation.multiply ( processed, original ), n );
-			// Append processed into reference array
-			reference.add ( new Decimal ( processed.stringify () ) );
-			// Increment iterator
-			iterator = Operation.add ( iterator, KeyGeneration.one );
-		}
-		// Return the string version of the result
-		return processed.stringify ( 2 );
+		return cleanup.stringify ( Display.blocking * 2 );
 	}
 
 }

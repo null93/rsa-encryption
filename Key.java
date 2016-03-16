@@ -67,7 +67,7 @@ public class Key {
 	 * @static
 	 * @final
 	 */
-	private static final String folder = "./output";
+	protected static final String folder = "./output";
 
 	/**
 	 * This enum class is used to enumerate the types of Decimals that are stored internally.  It is
@@ -144,7 +144,7 @@ public class Key {
 	 */
 	protected Key ( Decimal n, Decimal k, Key.Type type ) {
 		// Make sure the output folder exists
-		this.checkFile ( Key.folder, "./" );
+		checkFile ( Key.folder, "./" );
 		// Save the key type internally
 		this.type = type;
 		// Save the public and private keys internally
@@ -161,7 +161,7 @@ public class Key {
 	 */
 	protected Key ( String filepath ) throws RSAException {
 		// Make sure the output folder exists
-		this.checkFile ( Key.folder, "." );
+		checkFile ( Key.folder, "." );
 		// Try to parse the input XML file
 		try {
 			// Create a file instance from filepath
@@ -273,8 +273,9 @@ public class Key {
 	 * @param   String          folderName          The folder, or file, we want to create
 	 * @param   String          rootFolder          The directory where to look for the file
 	 * @return  Boolean                             If folder creation or discovery was successful
+	 * @static
 	 */
-	private boolean checkFile ( String folderName, String rootFolder ) {
+	protected static boolean checkFile ( String folderName, String rootFolder ) {
 		// Initialize the target folder name, accounting for operating system
 		File directory = new File ( new File ( rootFolder ), folderName );
 		// Check to see if the directory exists
@@ -338,7 +339,7 @@ public class Key {
 			String base = Key.folder + File.separator + timestamp + File.separator;
 			base += Key.Type.toString ( this.type ) + ".xml";
 			// Create a new folder inside output folder
-			this.checkFile ( timestamp, Key.folder );
+			checkFile ( timestamp, Key.folder );
 			// Create a new file for the public key
 			StreamResult result = new StreamResult ( new File ( base ) );
 			// Transform the source into the result (public)

@@ -72,6 +72,12 @@ public class Display implements ActionListener {
 	private String target = null;
 
 	/**
+	 * This data member is static an final, it represents the blocking size and is immutable
+	 * @var 	int 			blocking 			The blocking size
+	 */
+	protected static final int blocking = 8;
+
+	/**
 	 * This enum is used to refer to buttons and binds the enum index to the index in the buttons
 	 * data member.
 	 * @enum    Button                              Types of buttons in GUI
@@ -102,20 +108,8 @@ public class Display implements ActionListener {
 	 * instance and populates it with created buttons and text elements.
 	 */
 	public Display () {
-
-		// FOR DEBUGGING
-		try {
-			File file = new File("./example.txt");
-			file.getParentFile().mkdirs();
-			PrintWriter printWriter = new PrintWriter(file);
-			printWriter.print ("Hello\n\nWorld!");
-			printWriter.flush ();
-			printWriter.close ();
-		}
-		catch ( Exception e ) {
-			System.out.println ("FAILED TO INIT");
-		}
-
+		// Create the output folder
+		Key.checkFile ( Key.folder, "./" );
 		// Initialize the buttons array
 		this.buttons = new JButton [ 7 ];
 		// Initialize the text area array
@@ -378,9 +372,9 @@ public class Display implements ActionListener {
 		// Initialize a file chooser
 		JFileChooser chooser = new JFileChooser ();
 		// Pick to choose from current directory
-		chooser.setCurrentDirectory ( new File ( "." ) );
+		chooser.setCurrentDirectory ( new File ( Key.folder ) );
 		// Don't select anything by default
-		chooser.setSelectedFile ( new File ( "" ) );
+		chooser.setSelectedFile ( new File ( "." ) );
 		// Set the mode of selection we want
 		chooser.setFileSelectionMode ( JFileChooser.FILES_ONLY );
 		// Initialize opening the window
@@ -521,7 +515,7 @@ public class Display implements ActionListener {
 		// Try to block input file
 		try {
 			// Attempt to block message
-			Block block = new Block ( this.target, 1, this.target );
+			Block block = new Block ( this.target, Display.blocking, this.target );
 			// Report success
 			getTextArea ( TextArea.MESSAGE ).setText ( "Successfully blocked input file" );
 			// Enable based on key
@@ -553,7 +547,7 @@ public class Display implements ActionListener {
 		// Try to unblock input file
 		try {
 			// Attempt to unblock message
-			Unblock block = new Unblock ( this.target, 1, this.target );
+			Unblock block = new Unblock ( this.target, Display.blocking, this.target );
 			// Report success
 			getTextArea ( TextArea.MESSAGE ).setText ( "Successfully unblocked input file" );
 			// Enable based on key
