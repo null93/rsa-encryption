@@ -1,3 +1,5 @@
+package com.rsa_encryption;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
@@ -69,7 +71,7 @@ public class Window extends JFrame {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	protected JPanel addPanel ( int rows, int cols ) {
 		// Make a panel object with passed number of rows and columns

@@ -1,7 +1,10 @@
+package com.rsa_encryption;
+
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 import java.io.File;
+import java.io.InputStream;
 
 /**
  * Prime.java - This class will consist of static and non-static functions.  Some examples of static
@@ -28,7 +31,7 @@ public class Prime {
 	 * @static
 	 * @final
 	 */
-	private static final String filepath = "./PrimeNumbers.rsc";
+	private static final String filepath = "primes.rsc";
 
 	/**
 	 * This Array list is a dynamic array that grows and populates as we read in all predefined
@@ -49,24 +52,28 @@ public class Prime {
 	 * from the resource file and loads it into the dynamic array.
 	 */
 	protected Prime () {
-		// Initialize dynamic array of Decimal instances
-		this.primes = new ArrayList <Decimal> ();
-		// Try to open the file and read in primes
-		try {
-			// Initialize scanner instance based on filepath for resource file
-			Scanner scanner = new Scanner ( new File ( Prime.filepath ) );
-			// Loop through until we have no more input
-			while ( scanner.hasNextLine () ) {
-				// Add this Decimal to the primes array
-  				this.primes.add ( new Decimal ( scanner.nextLine () ) );
-			}
-		}
-		// If we throw an exception, then catch it
-		catch ( Exception exception ) {
-			// Exit the program, since we don't want to encounter such an error
-			System.exit ( 0 );
-		}
-
+	// Initialize dynamic array of Decimal instances
+	this.primes = new ArrayList <Decimal> ();
+	// Try to open the file and read in primes
+	try {
+	// Get class loader and open resource file with list of primes
+	ClassLoader classLoader = getClass ().getClassLoader ();
+	InputStream inputStream = classLoader.getResourceAsStream (
+	Prime.filepath
+	);
+	// Initialize scanner instance based on input stream
+	Scanner scanner = new Scanner ( inputStream );
+	// Loop through until we have no more input
+	while ( scanner.hasNextLine () ) {
+	// Add this Decimal to the primes array
+	this.primes.add ( new Decimal ( scanner.nextLine () ) );
+	}
+	}
+	// If we throw an exception, then catch it
+	catch ( Exception exception ) {
+	// Exit the program, since we don't want to encounter such an error
+	System.exit ( 0 );
+	}
 	}
 
 	/**
@@ -75,14 +82,14 @@ public class Prime {
 	 * @return 	Decimal 							A random prime number from resource file
 	 */
 	protected Decimal random () {
-		// Seed our random number generator
-		this.seed *= System.currentTimeMillis ();
-		// Apply modulus to our counting seed
-		this.seed %= System.currentTimeMillis ();
-		// Create a random number generator
-		Random generator = new Random ( this.seed );
-		// Return a random index from the primes array list
-		return this.primes.get ( generator.nextInt ( this.primes.size () ) );
+	// Seed our random number generator
+	this.seed *= System.currentTimeMillis ();
+	// Apply modulus to our counting seed
+	this.seed %= System.currentTimeMillis ();
+	// Create a random number generator
+	Random generator = new Random ( this.seed );
+	// Return a random index from the primes array list
+	return this.primes.get ( generator.nextInt ( this.primes.size () ) );
 	}
 
 }

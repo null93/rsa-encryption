@@ -1,3 +1,5 @@
+package com.rsa_encryption;
+
 /**
  * RSA.java - This class is the first one that is launched and contains the static main method that
  * initializes the GUI.java class and displays a user interface to the user.  This class is simply

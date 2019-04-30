@@ -1,3 +1,5 @@
+package com.rsa_encryption;
+
 /**
  * KeyGeneration.java - This class is able to load already generated public and private keys that
  * are in XML format, or is also able to generate brand new ones using either user defined prime
